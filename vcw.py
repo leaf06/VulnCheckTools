@@ -37,13 +37,19 @@ def read_cve_ids_from_csv(filename):
 def write_json_to_file(data, filename):
     with open(filename, 'w') as file:
         json.dump(data, file, indent=4)
+        
+def is_csv_file(filename):
+    return filename.lower().endswith('.csv')
 
 # Usage
 api_key = get_api_key()
 api = VulnCheckAPI(api_key)
 
-filename = input("Enter the CSV filename: ")
-cve_list = read_cve_ids_from_csv(filename)
+user_input = input("Enter the CSV filename or a list of CVE IDs (comma-separated): ")
+if is_csv_file(user_input):
+    cve_list = read_cve_ids_from_csv(user_input)
+else:
+    cve_list = user_input.split(',')
 
 endpoint_input = input("Enter the endpoint flag (-v, -e, -iai) and optionally '-c' for count only: ").split()
 endpoint_flags = {'-v': 'vulncheck-nvd2', '-e': 'exploits', '-iai': 'initial-access'}
@@ -52,7 +58,7 @@ count_only = '-c' in endpoint_input
 
 all_responses = []
 for cve_id in cve_list:
-    response = api.get_vulncheck_data(cve_id, endpoint)
+    response = api.get_vulncheck_data(cve_id.strip(), endpoint)
 
     if api.is_authorized(response):
         response_json = response.json()
