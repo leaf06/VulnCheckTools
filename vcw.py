@@ -41,6 +41,25 @@ def write_json_to_file(data, filename):
 def is_csv_file(filename):
     return filename.lower().endswith('.csv')
 
+def show_help():
+    print("Usage:")
+    print("1. To read CVE IDs from a CSV file: Enter the filename with '.csv' extension.")
+    print("2. To input a list of CVE IDs directly: Enter the CVE IDs separated by commas.")
+    print("3. Specify the endpoint flag after the input: -v, -e, -iai.")
+    print("   -v: vulncheck-nvd2 endpoint")
+    print("   -e: exploits endpoint")
+    print("   -iai: initial-access endpoint")
+    print("4. Optionally add '-c' to get the count of CVEs with data without JSON details.")
+    print("5. Use '-h' for help.")
+    print("Example: 'input.csv -v -c' or 'CVE-2021-1234,CVE-2021-2345 -e'")
+    exit()
+
+
+# Check for help flag
+if '-h' in os.sys.argv:
+    show_help()
+
+
 # Usage
 api_key = get_api_key()
 api = VulnCheckAPI(api_key)
